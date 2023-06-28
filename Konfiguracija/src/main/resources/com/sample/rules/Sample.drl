@@ -1,0 +1,79 @@
+package com.sample.rules
+ 
+import com.sample.Laptop;
+ 
+rule "Racunar za igrice"
+    when
+        l : Laptop(koristiZa == "igrice" && procesor == "")
+    then
+        l.setProcesor("Intel i5 ili AMD Ryzen 5");
+       	l.setGbRam(12);
+       	l.setGbSSD(512);
+       	l.setIntegrisanaGraficka(false);
+        update(l);
+end
+
+rule "Racunar za poslovne aplikacije"
+    when
+        l : Laptop(koristiZa == "poslovne aplikacije" && procesor == "")
+    then
+        l.setProcesor("Intel i3 ili AMD Ryzen 3");
+       	l.setGbRam(8);
+       	l.setGbSSD(256);
+       	l.setIntegrisanaGraficka(true);
+        update(l);
+end
+
+
+rule "Racunar za graficki dizajn/CAD"
+    when
+        l : Laptop(koristiZa == "graficki dizajn/CAD programiranje" && procesor == "")
+    then
+        l.setProcesor("Intel i3 ili AMD Ryzen 3");
+       	l.setGbRam(8);
+       	l.setGbSSD(512);
+       	l.setIntegrisanaGraficka(false);
+        update(l);
+end
+
+rule "Racunar za nove igrice"
+    when
+        l : Laptop(noveIgrice == true && koristiZa == "igrice" && procesor == "Intel i5 ili AMD Ryzen 5")
+    then
+        l.setProcesor("Intel i7 ili AMD Ryzen 7");
+       	l.setGbRam(16);
+       	l.setGbSSD(1024);
+        update(l);
+end
+
+rule "Racunar za teren 1"
+    when
+        l : Laptop(naTerenu == true && (koristiZa == "igrice" || koristiZa == "graficki dizajn/CAD programiranje" ) && velicinaEkranaInc == 0)
+    then
+        l.setVelicinaEkranaInc(15);
+        update(l);
+end
+
+rule "Racunar za teren 2"
+    when
+        l : Laptop(naTerenu == false && (koristiZa == "igrice" || koristiZa == "graficki dizajn/CAD programiranje" ) && velicinaEkranaInc == 0)
+    then
+        l.setVelicinaEkranaInc(17);
+        update(l);
+end
+
+rule "Uslov za teren 3"
+    when
+        l : Laptop( naTerenu == true && koristiZa == "poslovne aplikacije" && velicinaEkranaInc == 0 )
+    then
+		l.setVelicinaEkranaInc(14);
+        update(l);
+end
+
+rule "Uslov za teren 4"
+    when
+        l : Laptop( naTerenu == false && koristiZa == "poslovne aplikacije" && velicinaEkranaInc == 0 )
+    then
+		l.setVelicinaEkranaInc(15);
+        update(l);
+end

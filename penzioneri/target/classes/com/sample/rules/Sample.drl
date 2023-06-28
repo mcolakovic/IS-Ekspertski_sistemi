@@ -1,0 +1,83 @@
+package com.sample.rules;
+ 
+import com.sample.Penzioneri;
+ 
+rule "Starosna granica za zene"
+    when
+        p : Penzioneri(pol == 'Z' && starosna_granica == 0)
+    then
+        p.setStarosna_granica(63);
+		update(p);
+end
+
+rule "Starosna granica za muskarce"
+    when
+        p : Penzioneri(pol == 'M' && starosna_granica == 0)
+    then
+        p.setStarosna_granica(65);
+		update(p);
+end
+
+rule "Puna penzija"
+	when
+		p : Penzioneri(godine >= starosna_granica && godine_staza >= 40 && penzija == null)
+	then
+		p.setPenzija("puna penzija");
+		update(p);
+end
+
+rule "Prevremena puna penzija"
+	when
+		p : Penzioneri(godine + 5 > starosna_granica && godine_staza >= 40 && penzija == null)
+	then
+		p.setPenzija("prevremena puna penzija");
+		update(p);
+end
+
+rule "Nema pravo na penziju"
+	when
+		p : Penzioneri(starosna_granica - godine > 5 && godine_staza < 40 && invaliditet == false && penzija == null)
+	then
+		p.setPenzija("nema pravo na penziju");
+		update(p);
+end
+
+rule "Starosna penzija"
+	when
+		p : Penzioneri(godine >= starosna_granica && godine_staza < 40 && penzija == null)
+	then
+		p.setPenzija("starosna penzija");
+		update(p);
+end
+
+rule "Invalidska penzija"
+	when
+		p : Penzioneri(starosna_granica - godine > 5 && godine_staza < 40 && invaliditet == true && penzija == null)
+	then
+		p.setPenzija("invalidska penzija");
+		update(p);
+end
+
+rule "Procenat punepenzije"
+	when
+		p : Penzioneri(penzija != null && procenat_penzije == 0 && (penzija == "puna penzija" || penzija == "prevremena puna penzija"))
+	then
+		p.setProcenat_penzije(70.00);
+		update(p);
+end
+
+rule "Procenat starosne penzije"
+	when
+		p : Penzioneri(penzija != null && procenat_penzije == 0 && penzija == "starosna penzija")
+	then
+		p.setProcenat_penzije(p.getGodine_staza() * 70.00 / 40.00);
+		update(p);
+end
+
+rule "Procenat invalidske penzije"
+	when
+		p : Penzioneri(penzija != null && procenat_penzije == 0 && penzija == "invalidska penzija")
+	then
+		p.setProcenat_penzije(50.00);
+		update(p);
+end

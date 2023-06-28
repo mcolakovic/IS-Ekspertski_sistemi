@@ -1,0 +1,69 @@
+package com.sample.rules
+ 
+import com.sample.Krov;
+ 
+rule "Krov prokisnjava po sredini i krov ulegao"
+    when
+        k : Krov(prokisnjava.contains("po sredini") && ulegaoKrov == true && !potrebniRadovi.contains("zamijeniti krov"))
+    then
+   	 	k.getPotrebniRadovi().add("zamijeniti krov");
+        k.setCijena( k.getCijena() + 1000 + (10 * k.getKvadratura()));
+        update(k);
+end
+
+rule "Krov prokisnjava po sredini i nedostaju crepovi"
+    when
+         k : Krov(prokisnjava.contains("po sredini") && crepoviNedostaju > 0 && !potrebniRadovi.contains("zamijeniti crijepove"))
+    then
+        k.getPotrebniRadovi().add("zamijeniti crijepove");
+        k.setCijena( k.getCijena() + 2 * k.getCrepoviNedostaju());
+        update(k);
+end
+
+rule "Krov prokisnjava po sredini"
+    when
+         k : Krov(prokisnjava.contains("po sredini") && crepoviNedostaju == 0 && ulegaoKrov == false &&  !potrebniRadovi.contains("pregled krova"))
+    then
+        k.getPotrebniRadovi().add("pregled krova");
+        k.setCijena( k.getCijena() + 200);
+        update(k);
+end
+
+rule "Krov prokisnjava oko odzaka"
+    when
+         k : Krov(prokisnjava.contains("oko odzaka") && !potrebniRadovi.contains("olucarski radovi"))
+    then
+        k.getPotrebniRadovi().add("olucarski radovi");
+        k.setCijena( k.getCijena() + 50);
+        update(k);
+end
+
+rule "Krov prokisnjava po ivici i oluci zardjali i ima drvo"
+    when
+        k : Krov(prokisnjava.contains("po ivici") && oluciZardjali == true && drvoIznadKrova == true && !potrebniRadovi.contains("zamijeniti oluke") && !potrebniRadovi.contains("skratiti krosnju drveta"))
+    then
+   	 	k.getPotrebniRadovi().add("zamijeniti oluke");
+   	 	k.getPotrebniRadovi().add("skratiti krosnju drveta");
+        k.setCijena( k.getCijena() + 300 + 50);
+        update(k);
+end
+
+rule "Krov prokisnjava po ivici i ima drvo"
+    when
+        k : Krov(prokisnjava.contains("po ivici") && oluciZardjali == false && drvoIznadKrova == true && !potrebniRadovi.contains("ocistiti oluke") && !potrebniRadovi.contains("skratiti krosnju drveta"))
+    then
+   	 	k.getPotrebniRadovi().add("ocistiti oluke");
+   	 	k.getPotrebniRadovi().add("skratiti krosnju drveta");
+        k.setCijena( k.getCijena() + 20 + 50);
+        update(k);
+end
+
+rule "Krov prokisnjava niz zid ili po ivici"
+    when
+        k : Krov(prokisnjava.contains("niz zid") && prokisnjava.contains("po ivici") && oluciZardjali == true && !potrebniRadovi.contains("zamijeniti oluke"))
+    then
+   	 	k.getPotrebniRadovi().add("zamijeniti oluke");
+   	 	k.getPotrebniRadovi().add("skratiti krosnju drveta");
+        k.setCijena( k.getCijena() + 300);
+        update(k);
+end

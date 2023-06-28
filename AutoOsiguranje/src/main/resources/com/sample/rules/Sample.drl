@@ -1,0 +1,171 @@
+package com.sample.rules
+ 
+import com.sample.Auto;
+ 
+rule "Uslov 1"
+    when
+        a : Auto(snagaMotora <= 40 && osnovnaCijena == 0)
+    then
+        a.setOsnovnaCijena(10000);
+        update(a);
+end
+
+rule "Uslov 2"
+    when
+        a : Auto(snagaMotora > 40 && snagaMotora <= 50 && osnovnaCijena == 0)
+    then
+        a.setOsnovnaCijena(11000);
+        update(a);
+end
+
+rule "Uslov 3"
+    when
+        a : Auto(snagaMotora > 50 && snagaMotora <= 75 && osnovnaCijena == 0)
+    then
+        a.setOsnovnaCijena(15000);
+        update(a);
+end
+
+rule "Uslov 4"
+    when
+        a : Auto(snagaMotora > 75 && osnovnaCijena == 0)
+    then
+        a.setOsnovnaCijena(25000);
+        update(a);
+end
+
+rule "Uslov 5"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 1 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 0.85);
+        update(a);
+end
+
+rule "Uslov 6"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 2 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 0.9);
+        update(a);
+end
+
+rule "Uslov 7"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 3 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 0.95);
+        update(a);
+end
+
+rule "Uslov 8"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 5 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 1.1);
+        update(a);
+end
+
+rule "Uslov 9"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 6 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 1.3);
+        update(a);
+end
+
+rule "Uslov 10"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 7 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 1.5);
+        update(a);
+end
+
+rule "Uslov 11"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 8 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 1.7);
+        update(a);
+end
+
+rule "Uslov 12"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 9 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 1.9);
+        update(a);
+end
+
+rule "Uslov 13"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 10 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 2.1);
+        update(a);
+end
+
+rule "Uslov 14"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 11 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 2.3);
+        update(a);
+end
+
+rule "Uslov 15"
+    when
+        a : Auto(premijskiStepenTekucaGodina == 12 && (osnovnaCijena == 10000 || osnovnaCijena == 11000 || osnovnaCijena == 15000 || osnovnaCijena == 25000))
+    then
+        a.setOsnovnaCijena(a.getOsnovnaCijena() * 2.5);
+        update(a);
+end
+
+rule "Uslov 16"
+	when
+		a : Auto(novoVozilo == true && premijskiStepenTekucaGodina == 0)
+	then
+		a.setPremijskiStepenTekucaGodina(4);
+		update(a)
+end
+
+rule "Uslov 17"
+	when
+		a : Auto(novoVozilo == false && nezgode == 0 && premijskiStepenTekucaGodina == 0)
+	then
+		a.setPremijskiStepenTekucaGodina(a.getPremijskiStepenPrethodnaGodina() - 1);
+		update(a);
+end
+
+rule "Uslov 18"
+	when
+		a : Auto(novoVozilo == false && nezgode != 0 && premijskiStepenTekucaGodina == 0)
+	then
+		a.setPremijskiStepenTekucaGodina(a.getPremijskiStepenPrethodnaGodina() + 3 * a.getNezgode());
+		update(a);
+end
+
+rule "Uslov 19"
+	when
+		a : Auto(premijskiStepenTekucaGodina > 12)
+	then
+		a.setPremijskiStepenTekucaGodina(12);
+		update(a);
+end
+
+rule "Uslov 20"
+	when
+		a : Auto(premijskiStepenTekucaGodina <= 4)
+	then
+		a.setKonacnaCijena(a.getOsnovnaCijena() * (0.8 + a.getPremijskiStepenTekucaGodina() * 0.05));
+		update(a);
+end
+
+rule "Uslov 21"
+	when
+		a : Auto(premijskiStepenTekucaGodina >= 5)
+	then
+		a.setKonacnaCijena(a.getOsnovnaCijena() * (0.2 * a.getPremijskiStepenTekucaGodina() + 0.1));
+		update(a);
+end
